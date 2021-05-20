@@ -1,0 +1,39 @@
+version: '3.7'
+
+volumes:
+  app-postgres-data:
+
+networks:
+  postgres-net:
+    name: postgres-net
+
+services:
+  app-postgres:
+    container_name: app-postgres
+    restart: always
+    image: postgres
+    volumes:
+      - app-postgres-data:/data/db
+    environment:
+      - POSTGRES_DB=user_management
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123456
+      - ALLOW_IP_RANGE=0.0.0.0/0
+    ports:
+      - '5432:5432'
+    networks:
+      - postgres-net
+
+  app-pg:
+    container_name: app-pg
+    restart: always
+    image: dpage/pgadmin4:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123456
+      - PGADMIN_DEFAULT_PASSWORD=admin123456
+      - PGADMIN_DEFAULT_EMAIL=pedram.aghasian@yahoo.com
+    ports:
+      - '80:80'
+    networks:
+      - postgres-net
