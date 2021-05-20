@@ -1,5 +1,6 @@
-import { Table, Model, Column } from 'sequelize-typescript';
+import { Table, Model, Column, BeforeSave } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
+import { Bcrypt } from 'src/shared/helper/bcrypt';
 @Table({
   timestamps: true,
   tableName: 'users',
@@ -40,4 +41,12 @@ export class User extends Model<User> {
     validate: { trim: true },
   })
   password: string;
+
+  @BeforeSave
+  static async hashPassword(user: User) {
+    if (user.password) {
+      const hashedPassword = await Bcrypt.hashPassword(user.password);
+      user.password = hashedPassword;
+    }
+  }
 }

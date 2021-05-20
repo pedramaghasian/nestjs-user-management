@@ -1,4 +1,4 @@
-import { RegisterDto } from './../../../../domain/dto/register.dto';
+import { RegisterDto } from '../../../../domain/dto/auth/register.dto';
 import { Injectable } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
 import { User } from '../models/user.model';
@@ -10,7 +10,11 @@ export class UserRepository extends AbstractEntityRepository<User> {
     super(sequelize.model('User'));
   }
 
-  createUser(data: RegisterDto) {
+  createUser(data: RegisterDto): Promise<User> {
     return this.create(data);
+  }
+
+  findOneUser(criteria): Promise<User> {
+    return this.findOne(criteria);
   }
 }
