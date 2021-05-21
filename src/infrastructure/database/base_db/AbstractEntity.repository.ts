@@ -14,6 +14,12 @@ export abstract class AbstractEntityRepository<T> {
     return this.model.findOne({ where: criteria }).catch(this._errorHandler);
   }
 
+  update(data, criteria): Promise<T> {
+    return this.model
+      .update(data, { where: criteria })
+      .catch(this._errorHandler);
+  }
+
   async _errorHandler(err) {
     if (err.parent?.code == 23505) {
       throw new ConflictException('phone number or email is already exist');

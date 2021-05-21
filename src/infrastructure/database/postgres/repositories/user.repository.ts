@@ -17,4 +17,8 @@ export class UserRepository extends AbstractEntityRepository<User> {
   findOneUser(criteria): Promise<User> {
     return this.findOne(criteria);
   }
+
+  updateUser(data, criteria): Promise<User> {
+    return this.update(data, criteria);
+  }
 }

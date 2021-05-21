@@ -42,6 +42,18 @@ export class User extends Model<User> {
   })
   password: string;
 
+  @Column({
+    type: DataTypes.STRING(255),
+    validate: { trim: true },
+  })
+  expirationDate: string;
+
+  @Column({
+    type: DataTypes.STRING(6),
+    validate: { trim: true },
+  })
+  verificationCode: string;
+
   @BeforeSave
   static async hashPassword(user: User) {
     if (user.password) {

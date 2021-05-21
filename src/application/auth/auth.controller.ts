@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import {
   Body,
   Controller,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -18,10 +19,20 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ForgotPasswordDto } from 'src/domain/dto/auth/forgotPassword.dto';
+import { ChangePasswordDto } from 'src/domain/dto/auth/changePassword.dto';
 
 @ApiTags('Auth')
 @ApiBearerAuth('JWT')
-@UseInterceptors(new ResponseSerialization(['password']))
+@UseInterceptors(
+  new ResponseSerialization([
+    'password',
+    'expirationDate',
+    'verificationCode',
+    'updatedAt',
+    'createdAt',
+  ]),
+)
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -51,5 +62,25 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   whoami(@Req() req) {
     return this.authService.whoami(req?.user as User);
+  }
+
+  @Post('forgotPassword')
+  @ApiOperation({ summary: 'Forgot Password' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Patch('changePassword')
+  @ApiOperation({ summary: 'Change Password' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
+  changePassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    return this.authService.changePassword(changePasswordDto);
   }
 }

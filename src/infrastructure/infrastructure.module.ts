@@ -6,10 +6,10 @@ import { User } from './database/postgres/models/user.model';
   imports: [
     SequelizeModule.forRoot({
       port: 5432,
-      host: 'localhost',
-      username: 'admin',
-      password: 'admin123456',
-      database: 'user_management',
+      host: process.env.POSTGRES_HOST,
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASS,
+      database: process.env.POSTGRES_DB,
       dialect: 'postgres',
       autoLoadModels: true,
       models: [User],

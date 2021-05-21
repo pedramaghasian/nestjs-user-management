@@ -4,10 +4,27 @@ volumes:
   app-postgres-data:
 
 networks:
-  postgres-net:
-    name: postgres-net
+  my-net:
+    name: my-net
 
 services:
+  user_management:
+    container_name: user_management
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    tty: true
+    ports:
+      - '3000:3000'
+    command: ['sh', '-c', 'ls && npm install && npm run start:dev']
+    env_file:
+      - .env
+    networks:
+      - my-net
+
   app-postgres:
     container_name: app-postgres
     restart: always
@@ -22,18 +39,18 @@ services:
     ports:
       - '5432:5432'
     networks:
-      - postgres-net
+      - my-net
 
-  app-pg:
-    container_name: app-pg
-    restart: always
-    image: dpage/pgadmin4:latest
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin123456
-      - PGADMIN_DEFAULT_PASSWORD=admin123456
-      - PGADMIN_DEFAULT_EMAIL=pedram.aghasian@yahoo.com
-    ports:
-      - '80:80'
-    networks:
-      - postgres-net
+  # app-pg:
+  #   container_name: app-pg
+  #   restart: always
+  #   image: dpage/pgadmin4:latest
+  #   environment:
+  #     - POSTGRES_USER=admin
+  #     - POSTGRES_PASSWORD=admin123456
+  #     - PGADMIN_DEFAULT_PASSWORD=admin123456
+  #     - PGADMIN_DEFAULT_EMAIL=pedram.aghasian@yahoo.com
+  #   ports:
+  #     - '80:80'
+  #   networks:
+  #     - my-net

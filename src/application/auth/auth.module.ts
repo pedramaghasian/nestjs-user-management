@@ -1,3 +1,4 @@
+import { MailModule } from './../mail/mail.module';
 import { JwtStrategy } from './../../shared/passport/jwt.strategy';
 import { UserRepository } from './../../infrastructure/database/postgres/repositories/user.repository';
 import { Module } from '@nestjs/common';
@@ -13,11 +14,12 @@ import { PassportModule } from '@nestjs/passport';
     SequelizeModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'myVeryTopSecret*&^%$45AS!@#1648987/',
+      secret: process.env.JWT_SECRET,
       signOptions: {
         expiresIn: 3600,
       },
     }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, UserRepository, JwtStrategy],

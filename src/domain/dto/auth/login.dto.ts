@@ -14,7 +14,7 @@ export class LoginDto {
   @IsString()
   @ApiProperty({
     type: String,
-    example: 'JohnDoe!@#$',
+    example: '123456789',
   })
   password: string;
 }

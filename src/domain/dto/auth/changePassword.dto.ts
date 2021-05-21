@@ -1,30 +1,36 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsEmail,
+  MaxLength,
+} from 'class-validator';
 
-export class RegisterDto {
+export class ChangePasswordDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
     type: String,
-    example: 'pedram',
+    example: 'BOOazar!2021',
   })
-  fname: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    type: String,
-    example: 'aghasian',
-  })
-  lname: string;
+  password: string;
 
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
     type: String,
-    example: '09120285698',
+    example: 'BOOazar!2021',
   })
-  phone: string;
+  confirmPassword: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    type: String,
+    example: '654789',
+  })
+  verificationCode: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -33,12 +39,4 @@ export class RegisterDto {
     example: 'pedram@yahoo.com',
   })
   email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({
-    type: String,
-    example: '123456789',
-  })
-  password: string;
 }
